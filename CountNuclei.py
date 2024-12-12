@@ -1,5 +1,4 @@
-"""
-Documentation
+""" Documentation
 Author: Samuel Crouse
 Lab: WSBC Sun Lab
 
@@ -13,6 +12,15 @@ import math
 
 # loads an image and converts it to grayscale
 def loadImageGrayscale(filePath, savePath=None):
+    """ Documentation
+    Loads an image from filePath and converts it to grayscale. Saves the new image
+    to savePath if savePath is set.
+
+    :param filePath: str: The absolute path to the image file.
+    :param savePath: str: The absolute path to save the gray scaled image to.
+    :returns: PIL Image Obj: The pillow image object.
+    """
+
     img = Image.open(filePath).convert('L')
 
     if savePath is not None:
@@ -23,6 +31,16 @@ def loadImageGrayscale(filePath, savePath=None):
 
 # normalizes a grayscale image
 def normalizeImage(img, normalToImg, savePath=None):
+    """ Documentation
+    Given a PIL img, normalizes it an existing grayscale image. Saves new image to
+    savePath if savePath is set.
+
+    :param img: PIL obj: The img to normalize.
+    :param normalToImg: PIL obj: The PIL img to use as the base for normalization.
+    :param savePath: str: The path to save the normalized image to.
+    :returns: PIL Obj: The normalized image.
+    """
+
     pix = img.load()
     width = normalToImg.width
     height = normalToImg.height
@@ -61,6 +79,22 @@ def normalizeImage(img, normalToImg, savePath=None):
 # note: counts the nuclei in the image based on a threshold grayscale value
 # threshold and lowerThreshold are inclusive bounds
 def countNuclei(img, upperThreshold, lowerThreshold=None, nucleiPixelWidth=5, mark=False, simple=False, verySimple=False, savePath=None, saveCountsToIMG=False):
+    """ Documentation
+    Count and mark the cells in the image based on the provided settings. simple and verySimple should be set to False
+    to perform most accurate count. This is set by default. They can be enabled for testing to increase program speed.
+
+    :param img: PIL obj: The image to count.
+    :param upperThreshold: float: The upper rgb value to mark. Below this value is counted.
+    :param lowerThreshold: float: If active, check gray value must be above this and below upperThreshold to count.
+    :param nucleiPixelWidth: int: The estimated pixel size of the nuclei in the image. Prevents duplicate marking.
+    :param mark: bool: Whether to mark the image with red dot or not.
+    :param simple: bool: Second-fastest marking. Marks left edge of nuclei. Useful for determining nuclei pixel size.
+    :param verySimple: bool: Fastest marking. Marks entire selected region. Useful for picking settings. Overrides simple.
+    :param savePath: str: The absolute path to save the output image. If None, doesn't save.
+    :param saveCountsToIMG: bool: Appends the cell count onto the file name.
+    :returns: count: int: The number of cells counted in the image.
+    """
+
     if lowerThreshold is None:
         lowerThreshold = 0
 
@@ -134,8 +168,18 @@ def countNuclei(img, upperThreshold, lowerThreshold=None, nucleiPixelWidth=5, ma
     return count
 
 
-# note: code for grayscaling and normalizing a new img
-def prepIMG(imgPath, savePath=None, normalPath=None, log=False):
+def prepImage(imgPath, savePath=None, normalPath=None, log=False):
+    """ Documentation
+    Speeds the process of gray-scaling and normalizing an image.
+    Returns the normalized image for counting.
+
+    :param imgPath: str: File path to the image.
+    :param savePath: str: Path to save the normalized image at.
+    :param normalPath: str: Path to the image to normalize to.
+    :param log: bool: Log image information or not.
+    :returns: PIL Obj: The img object to pass to countNuclei().
+    """
+
     if normalPath is None:
         normalPath = imgPath
 
@@ -157,12 +201,20 @@ def prepIMG(imgPath, savePath=None, normalPath=None, log=False):
 
 
 def main():
+    """ Documentation
+    Contains some tests for the above functions.
+    Loads an image, gray-scales, normalizes, and saves.
+    Imports previous from an images directory an image and counts/marks/saves.
+
+    :returns: None
+    """
+
     print("start tests...")
     directory = str(pathlib.Path().absolute().resolve()) + "\\images\\"
     imgNum = 3
 
     # code for grayscaling and normalizing a new img
-    """
+    # """
     img_path = directory + "img{}.png".format(imgNum)
     print("\ngrayscaling image...")
     img = loadImageGrayscale(img_path, savePath=directory+"gray{}.png".format(imgNum))
